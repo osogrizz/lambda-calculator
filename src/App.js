@@ -118,7 +118,12 @@ function App() {
       if (history[1] === '/') {
         let answer = ( Number(history[0]) / Number(history[2]));
         setDisplay([]);
-        setNumber(answer);
+        setNumber(0);
+        setDisplay(answer);
+        setHistory('');
+        setOperator(false);
+        setDecimal(false);
+        setPercent(false);
       }
 
     }
