@@ -12,7 +12,7 @@ import Logo from "./components/DisplayComponents/Logo";
 
 function App() {
   // STEP 5 - After you get the components displaying using the provided data file, write your state hooks here.
-  const [number, setNumber] = useState(0);
+  const [number, setNumber] = useState([0]);
   const [display, setDisplay] = useState([]);
   const [decimal, setDecimal] = useState(false);
   const [percent, setPercent] = useState(false);
@@ -29,7 +29,7 @@ function App() {
     if (decimal && event.target.innerText === '.') {
       return null;
     } else {
-      setNumber(event.target.value);
+      setNumber([event.target.value]);
     }
   }
 
@@ -64,21 +64,23 @@ function App() {
   useEffect(() => {
     setHistory(history);
     console.log('history', history);
-  },[history], [display])
+  },[history])
   
   const handleDisplay = (event) => {
     display.push(number.toString());
-
+    
     if (display.length > 1 && display[0] === "0") {
       display.shift();
-    }
+    } 
+
+    
   }
 
   const handleOperator = (event) => {
     let operand = event.target.innerText;
     setOperator(event.target.value);
-    let num1 = display.join('').toString();
-    let num2 = display.join('').toString();
+    let num1 = display.join('');
+    let num2 = display.join('');
     
     if (history.length === 0) {
       if (num1 === []) {
@@ -93,8 +95,8 @@ function App() {
 
     if (operator && operand === '=') {
       setHistory(history.push(num2));
-      setHistory(history);
-      console.log('calculating...');
+      // setHistory([...history, num2]);
+      // setHistory(history);
       
       if (history[1] === '+') {
         let answer = ( Number(history[0]) + Number(history[2]));
@@ -125,10 +127,6 @@ function App() {
       setPercent(false);
 
     }
-    console.log('history', history);
-    
-    
-
   }
 
   return (
