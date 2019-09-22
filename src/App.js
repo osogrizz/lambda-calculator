@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 // STEP 4 - import the button and display components
 import Numbers from './components/ButtonComponents/NumberButtons/Numbers';
@@ -18,8 +18,7 @@ function App() {
   const [percent, setPercent] = useState(false);
   const [operator, setOperator] = useState('');
   const [history, setHistory] = useState([]);
-  // const [special, setSpecial] = useState(0);
-  const [amount, setAmount] = useState([]);
+  const [amount, setAmount] = useState();
   // Once the state hooks are in place write some functions to hold data in state and update that data depending on what it needs to be doing
   // Your functions should accept a parameter of the the item data being displayed to the DOM (ie - should recieve 5 if the user clicks on
   // the "5" button, or the operator if they click one of those buttons) and then call your setter function to update state.
@@ -62,14 +61,22 @@ function App() {
   }
 
   const handleDisplay = (event) => {
+
     display.push(number.toString());
+    // setDisplay( number.toString());
+    // setDisplay(display);
 
     if (display.length > 1 && display[0] === "0") {
       display.shift();
     }
-    setDisplay(display);
+    // setDisplay(display);
   }
 
+  useEffect(() => {
+    setHistory(history);
+    console.log('history', history);
+  },[history])
+  
   const handleOperator = (event) => {
     let operand = event.target.innerText;
     setOperator(event.target.value);
@@ -83,20 +90,15 @@ function App() {
         setDecimal(false);
         setNumber(0);
         setDisplay([]); 
-        setHistory(history.push(num1));
-        setHistory(history.push( operand));
-        setHistory(history);
-        console.log('history', history);
+        setHistory([...history, num1, operand]);
       }
     } 
 
     if (operator && operand === '=') {
-      // setDisplay([]);
       setHistory(history.push(num2));
       setHistory(history);
       console.log('calculating...');
       
-      // setNumber(0); // set number to result of calculation
       if (history[1] === '+') {
         let answer = ( Number(history[0]) + Number(history[2]));
         setDisplay([]);
@@ -118,13 +120,13 @@ function App() {
       if (history[1] === '/') {
         let answer = ( Number(history[0]) / Number(history[2]));
         setDisplay([]);
-        setNumber(0);
-        setDisplay(answer);
-        setHistory('');
-        setOperator(false);
-        setDecimal(false);
-        setPercent(false);
+        setNumber(answer);
       }
+      // setNumber(0);
+      setHistory(history.length = 0);
+      setOperator(false);
+      setDecimal(false);
+      setPercent(false);
 
     }
     console.log('history', history);
